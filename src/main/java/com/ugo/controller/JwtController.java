@@ -1,4 +1,4 @@
-package com.ugo.turismo.java.controller;
+package com.ugo.controller;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

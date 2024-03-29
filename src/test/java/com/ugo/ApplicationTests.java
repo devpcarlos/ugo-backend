@@ -1,4 +1,4 @@
-package com.ugo.turismo.java;
+package com.ugo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
