@@ -1,4 +1,4 @@
-package com.ugo.turismo.java.k;
+package com.ugo.k;
 
 import com.myzlab.k.KBuilder;
 import java.util.HashMap;
