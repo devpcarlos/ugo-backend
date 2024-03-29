@@ -1,9 +1,12 @@
 package com.ugo.controller;
 
 import com.myzlab.k.KBuilder;
+import com.myzlab.k.KFunction;
+import com.myzlab.k.KValues;
 import static com.ugo.k.generated.metadata.Tables.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +33,27 @@ public class JwtController {
     @GetMapping("/test")
     public ResponseEntity test(){
         return k.
-            select(EXPERIENCE.PRICE).
-            from(EXPERIENCE).
+            select(ROLE.NAME).
+            from(ROLE).
             multiple().
             buildResponse("experiences");
+    }
+    
+    @GetMapping("/register")
+    public ResponseEntity register(){
+        final KValues role = KFunction.values()
+                .append("El nombre del rol", LocalDateTime.now());
+        
+            k
+            .insertInto(ROLE)
+            .columns(
+                ROLE.NAME,
+                ROLE.CREATED_AT
+            )
+            .values(role)
+            .execute();
+
+        
+        return ResponseEntity.ok().build();
     }
 }
