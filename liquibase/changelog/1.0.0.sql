@@ -185,3 +185,5 @@ CREATE TABLE ugo.assessment
 ALTER TABLE ugo.assessment ADD CONSTRAINT fk_assessment_app_user_id FOREIGN KEY (app_user_id) REFERENCES ugo.app_user (id);
 ALTER TABLE ugo.assessment ADD CONSTRAINT fk_assessment_experience_id FOREIGN KEY (experience_id) REFERENCES ugo.experience (id);
 
+--changeset carlosjesus.barreraaleman:ugo.pgcrypto_changelog.20240329_1700.1 context:test,dev,prod
+CREATE EXTENSION pgcrypto;
