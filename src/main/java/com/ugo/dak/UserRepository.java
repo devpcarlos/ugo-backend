@@ -1,15 +1,17 @@
 package com.ugo.dak;
 
+import com.myzlab.k.KAlgorithm;
 import com.myzlab.k.KBuilder;
 import com.myzlab.k.KFunction;
 import com.myzlab.k.KValues;
+import com.myzlab.k.sql.algorithms.KMd5;
 import com.ugo.k.generated.mappers.AppUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-import static com.myzlab.k.KFunction.crypt;
+import static com.myzlab.k.KFunction.genSalt;
 import static com.ugo.k.generated.metadata.Tables.APP_USER;
 
 @Component
@@ -27,7 +29,7 @@ public class UserRepository {
                         appUser.getPaternalSurname(),
                         appUser.getMaternalSurname(),
                         appUser.getEmail(),
-                        crypt(appUser.getPassword()),
+                        KFunction.crypt(appUser.getPassword()),
                         appUser.getEmailConfirmed(),
                         LocalDateTime.now());
 
