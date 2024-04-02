@@ -4,20 +4,26 @@ import com.myzlab.k.KBuilder;
 import com.myzlab.k.KFunction;
 import com.myzlab.k.KValues;
 import static com.ugo.k.generated.metadata.Tables.*;
+
+import com.ugo.dak.UserRepository;
+import com.ugo.k.generated.mappers.AppUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 public class JwtController {
     
     private final KBuilder k;
+
+@Autowired
+    private UserRepository usr;
 
     @PostMapping("/generateToken")
     public String generateToken(){
@@ -55,5 +61,15 @@ public class JwtController {
 
         
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/register-user")
+    public ResponseEntity<String> registerUsers(@RequestBody AppUser appUser){
+       try {
+           usr.registerUser(appUser);
+           return  new ResponseEntity<>("Usuario registrado exitosamente", HttpStatus.CREATED);
+       } catch (Exception e){
+           return new ResponseEntity<>("Error al registar usuario: " +e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+       }
     }
 }
