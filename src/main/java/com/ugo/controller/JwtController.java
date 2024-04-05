@@ -5,7 +5,7 @@ import com.myzlab.k.KFunction;
 import com.myzlab.k.KValues;
 import static com.ugo.k.generated.metadata.Tables.*;
 
-import com.ugo.dak.UserRepository;
+import com.ugo.dak.AppUserDAK;
 import com.ugo.k.generated.mappers.AppUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.*;
 public class JwtController {
     
     private final KBuilder k;
-
-@Autowired
-    private UserRepository usr;
 
     @PostMapping("/generateToken")
     public String generateToken(){
@@ -61,15 +58,5 @@ public class JwtController {
 
         
         return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/register-user")
-    public ResponseEntity<String> registerUsers(@RequestBody AppUser appUser){
-       try {
-           usr.registerUser(appUser);
-           return  new ResponseEntity<>("Usuario registrado exitosamente", HttpStatus.CREATED);
-       } catch (Exception e){
-           return new ResponseEntity<>("Error al registar usuario: " +e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-       }
     }
 }
