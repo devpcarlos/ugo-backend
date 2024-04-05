@@ -20,16 +20,19 @@ public class AuthService {
         final String password,
         final String captcha
     ) {
+        // Validar que los campos no estén vacíos
         ValidatorHelper.assertNotNullNotEmpty(email, "El email es obligatorio");
         ValidatorHelper.assertNotNullNotEmpty(password, "El password es obligatorio");
         ValidatorHelper.assertNotNullNotEmpty(captcha, "El captcha es obligatorio");
 
+        // Buscar al usuario por su correo electrónico y contraseña
         final AppUser appUser = appUserDAK.findByEmailToLogin(email.toLowerCase(), password);
-        
+
+        // Verificar si el usuario no existe o la contraseña no coincide
         if (appUser.isNull() || !appUser.getBoolean("pswmatch")) {
             throw KExceptionHelper.badRequest("Credenciales inválidas");
         }
-        
+        // Verificar si el correo electrónico del usuario no está confirmado
         if (appUser.getEmailConfirmed().equals(Boolean.FALSE)) {
             return DynamicObject.create()
                 .add("emailConfirmed", false)
@@ -43,5 +46,4 @@ public class AuthService {
             .add("maternalSurname", appUser.getMaternalSurname())
         .buildResponse();
     }
-    
 }
