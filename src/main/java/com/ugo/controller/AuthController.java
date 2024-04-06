@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("auth")
@@ -14,10 +16,10 @@ public class AuthController {
     
     @PostMapping("/login")
     public ResponseEntity login(
-        @RequestHeader(required = false) final String email,
-        @RequestHeader(required = false) final String password,
-        @RequestHeader(required = false) final String captcha
-    ) {
+            @RequestHeader(required = false) final String email,
+            @RequestHeader(required = false) final String password,
+            @RequestHeader(required = false) final String captcha
+            ) {
         return authService.login(email, password, captcha);
     }
     
