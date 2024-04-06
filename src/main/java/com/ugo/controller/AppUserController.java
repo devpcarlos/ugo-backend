@@ -1,6 +1,6 @@
 package com.ugo.controller;
 
-import com.ugo.k.generated.mappers.AppUser;
+import com.ugo.payloads.RegisterAppUserPayload;
 import com.ugo.services.AppUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +15,8 @@ public class AppUserController {
 
     @PostMapping
     public ResponseEntity register(
-        @RequestBody final AppUser appUser
+        @RequestBody final RegisterAppUserPayload registerAppUserPayload
     ) {
-        return appUserService.register(appUser);
+        return appUserService.register(registerAppUserPayload);
     }
 }
