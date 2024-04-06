@@ -2,6 +2,7 @@ package com.ugo.services;
 
 import com.myzlab.k.DynamicObject;
 import com.myzlab.k.helper.KExceptionHelper;
+import com.ugo.VerifyRecaptcha.CaptchaVerifier;
 import com.ugo.dak.AppUserDAK;
 import com.ugo.helpers.ValidatorHelper;
 import com.ugo.k.generated.mappers.AppUser;
@@ -25,6 +26,12 @@ public class AuthService {
         ValidatorHelper.assertNotNullNotEmpty(password, "El password es obligatorio");
         ValidatorHelper.assertNotNullNotEmpty(captcha, "El captcha es obligatorio");
 
+        //Verificar el reCAPTCHA utilizando la API de Google reCAPTCHA
+        boolean captchaValido = CaptchaVerifier.verificarCaptcha(captcha);
+
+        if (!captchaValido){
+            throw KExceptionHelper.badRequest("Captcha invalido");
+        }
         // Buscar al usuario por su correo electrónico y contraseña
         final AppUser appUser = appUserDAK.findByEmailToLogin(email.toLowerCase(), password);
 
@@ -38,7 +45,7 @@ public class AuthService {
                 .add("emailConfirmed", false)
                 .buildResponse();
         }
-        
+
         return DynamicObject.create()
             .add("emailConfirmed", true)
             .add("name", appUser.getName())
@@ -46,4 +53,5 @@ public class AuthService {
             .add("maternalSurname", appUser.getMaternalSurname())
         .buildResponse();
     }
+
 }
