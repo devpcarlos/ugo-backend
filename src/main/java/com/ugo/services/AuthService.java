@@ -6,6 +6,7 @@ import com.ugo.VerifyRecaptcha.CaptchaVerifier;
 import com.ugo.dak.AppUserDAK;
 import com.ugo.helpers.ValidatorHelper;
 import com.ugo.k.generated.mappers.AppUser;
+import com.ugo.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     
     private final AppUserDAK appUserDAK;
+    private final JwtTokenProvider jwtTokenProvider;
     
     public ResponseEntity login(
         final String email,
@@ -27,7 +29,7 @@ public class AuthService {
         ValidatorHelper.assertNotNullNotEmpty(captcha, "El captcha es obligatorio");
 
         //Verificar el reCAPTCHA utilizando la API de Google reCAPTCHA
-        boolean captchaValido = CaptchaVerifier.verificarCaptcha(captcha);
+       final boolean captchaValido = CaptchaVerifier.verificarCaptcha(captcha);
 
         if (!captchaValido){
             throw KExceptionHelper.badRequest("Captcha invalido");
@@ -46,6 +48,8 @@ public class AuthService {
                 .buildResponse();
         }
 
+        String token = jwtTokenProvider.generateToken(email);
+
         return DynamicObject.create()
             .add("emailConfirmed", true)
             .add("name", appUser.getName())
@@ -53,5 +57,4 @@ public class AuthService {
             .add("maternalSurname", appUser.getMaternalSurname())
         .buildResponse();
     }
-
 }
