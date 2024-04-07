@@ -13,7 +13,7 @@ public class AppUserController {
 
     private final AppUserService appUserService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity register(
         @RequestBody final RegisterAppUserPayload registerAppUserPayload
     ) {
