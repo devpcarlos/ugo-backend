@@ -17,6 +17,7 @@ public class AuthService {
     
     private final AppUserDAK appUserDAK;
     private final JwtTokenProvider jwtTokenProvider;
+    private final CaptchaVerifier captchaVerifier;
     
     public ResponseEntity login(
         final String email,
@@ -29,7 +30,7 @@ public class AuthService {
         ValidatorHelper.assertNotNullNotEmpty(captcha, "El captcha es obligatorio");
 
         //Verificar el reCAPTCHA utilizando la API de Google reCAPTCHA
-       final boolean captchaValido = CaptchaVerifier.verificarCaptcha(captcha);
+       final boolean captchaValido = captchaVerifier.verificarCaptcha(captcha);
 
         if (!captchaValido){
             throw KExceptionHelper.badRequest("Captcha invalido");
@@ -48,7 +49,7 @@ public class AuthService {
                 .buildResponse();
         }
 
-        String token = jwtTokenProvider.generateToken(email);
+        final String token = jwtTokenProvider.generateToken(email);
 
         return DynamicObject.create()
             .add("emailConfirmed", true)
