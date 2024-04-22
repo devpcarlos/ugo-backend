@@ -56,6 +56,7 @@ public class AuthService {
             .add("name", appUser.getName())
             .add("paternalSurname", appUser.getPaternalSurname())
             .add("maternalSurname", appUser.getMaternalSurname())
+            .add("token", token)
         .buildResponse();
     }
 }

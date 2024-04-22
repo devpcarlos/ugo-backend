@@ -9,13 +9,14 @@ import org.springframework.beans.factory.annotation.Value;
 import java.util.Date;
 
 @Component
-public class JwtTokenProvider {
+ public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
 
     @Value("${jwt.expiration}")
     private int jwtExpiration;
+
 
     public String generateToken(String email){
         Date now = new Date();
