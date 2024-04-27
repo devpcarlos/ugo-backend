@@ -1,50 +1,57 @@
 package com.ugo.security;
 
+import com.myzlab.k.KException;
+import com.myzlab.k.helper.KExceptionHelper;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.stereotype.Component;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
+import java.util.UUID;
 
 @Component
  public class JwtTokenProvider {
 
     @Value("${jwt.secret}")
     private String jwtSecret;
-
     @Value("${jwt.expiration}")
-    private int jwtExpiration;
+    private  int jwtExpiration;
 
-
-    public String generateToken(String email){
+    // Convierte la clave secreta de una cadena a un objeto SecretKey
+    private SecretKey getSecretKey(){
+        byte[] decodeKey = Base64.getDecoder().decode(jwtSecret.getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(decodeKey);
+    }
+    public String generateToken(final String email,
+                                final Long userId) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + jwtExpiration * 1000);
-
+        Date expiryDate = new Date(now.getTime() + jwtExpiration * 1000L);
+        // Agregar reclamaciones privadas
         return Jwts.builder()
-                .setSubject(email)
-                .setIssuedAt(new Date())
-                .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS256, jwtSecret)
+                .subject(email)
+                .id(UUID.randomUUID().toString())
+                .claim("email", email)
+                .claim("userId", userId)
+                .issuedAt(new Date())
+                .expiration(expiryDate)
+                .signWith(getSecretKey())
                 .compact();
     }
-
-    public  String getEmailFromToken(String token){
-        Claims claims = Jwts.parser()
-                .setSigningKey(jwtSecret)
-                .parseClaimsJws(token)
-                .getBody();
-        return claims.getSubject();
-    }
-
-    public boolean validateToken(String token){
-        try{
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token);
-            return true;
-        }catch (Exception e){
-            return false;
+    public Claims decode(String token) throws KException {
+        try {
+            return Jwts.parser()
+                    .verifyWith(getSecretKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch (ExpiredJwtException e) {
+            throw KExceptionHelper.unauthorized("El token JWT ha expirado");
         }
     }
-
 }

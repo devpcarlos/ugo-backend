@@ -15,7 +15,8 @@ public class ExperienceDAK {
 
     private final KBuilder K;
     public void createExperience(
-            final RegisterExperiencePayload registerExperiencePayload
+            final RegisterExperiencePayload registerExperiencePayload,
+            final Long userId
             ){
 
         final KValues experienceValues = KFunction.values()
@@ -23,7 +24,7 @@ public class ExperienceDAK {
                         registerExperiencePayload.getLocation(),
                         registerExperiencePayload.getAvailability(),
                         registerExperiencePayload.getPrice(),
-                        registerExperiencePayload.getAppUserId(),
+                        userId,
                         registerExperiencePayload.getActivityTypeId()
                 );
 
@@ -38,15 +39,5 @@ public class ExperienceDAK {
                 ).values(experienceValues)
                 .execute();
     }
-
-    public void ListAll (  ){
-        K
-                .select(EXPERIENCE.LOCATION,
-                        EXPERIENCE.AVAILABILITY,
-                        EXPERIENCE.PRICE,
-                        EXPERIENCE.ACTIVITY_TYPE_ID
-                        ).from(EXPERIENCE)
-                .multiple();
-    }
-
 }
+

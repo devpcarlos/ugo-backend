@@ -42,17 +42,11 @@ public class AuthService {
         if (appUser.isNull() || !appUser.getBoolean("pswmatch")) {
             throw KExceptionHelper.badRequest("Credenciales inválidas");
         }
-        // Verificar si el correo electrónico del usuario no está confirmado
-        if (appUser.getEmailConfirmed().equals(Boolean.FALSE)) {
-            return DynamicObject.create()
-                .add("emailConfirmed", false)
-                .buildResponse();
-        }
 
-        final String token = jwtTokenProvider.generateToken(email);
+        final String token = jwtTokenProvider.generateToken(email, appUser.getId());
 
         return DynamicObject.create()
-            .add("emailConfirmed", true)
+            .add("emailConfirmed", appUser.getEmailConfirmed())
             .add("name", appUser.getName())
             .add("paternalSurname", appUser.getPaternalSurname())
             .add("maternalSurname", appUser.getMaternalSurname())

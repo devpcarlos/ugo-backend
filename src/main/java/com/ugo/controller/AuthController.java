@@ -22,5 +22,4 @@ public class AuthController {
             ) {
         return authService.login(email, password, captcha);
     }
-    
 }
