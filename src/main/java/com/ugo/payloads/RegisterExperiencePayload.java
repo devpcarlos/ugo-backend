@@ -18,7 +18,7 @@ public class RegisterExperiencePayload extends PayloadValidator {
     @NotBlank(message = "El campo availability es obligatorio")
     private String availability;
 
-    @NotBlank(message = "El campo price es obligatorio")
+    @NotNull(message = "El campo price es obligatorio")
     private Double price;
 
     @NotNull( message = "El activityType es obligatorio")
@@ -26,6 +26,5 @@ public class RegisterExperiencePayload extends PayloadValidator {
 
     @NotNull( message = "El appUser es obligatorio")
     private Long appUserId;
-
 
 }

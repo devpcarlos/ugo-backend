@@ -1,13 +1,16 @@
 package com.ugo.dak;
 
-import com.myzlab.k.KBuilder;
-import com.myzlab.k.KFunction;
-import com.myzlab.k.KValues;
+import com.myzlab.k.*;
+import com.myzlab.k.optional.KOptionalCollection;
+import com.ugo.k.generated.mappers.AppUser;
+import com.ugo.k.generated.mappers.Experience;
 import com.ugo.payloads.RegisterExperiencePayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static com.ugo.k.generated.metadata.Tables.EXPERIENCE;
+import java.util.List;
+
+import static com.ugo.k.generated.metadata.Tables.*;
 
 @Component
 @RequiredArgsConstructor
@@ -38,6 +41,31 @@ public class ExperienceDAK {
                         EXPERIENCE.ACTIVITY_TYPE_ID
                 ).values(experienceValues)
                 .execute();
+    }
+
+    public KCollection fullList(
+            final Long userId){
+      final KCollection List = K
+                .select(EXPERIENCE.LOCATION,
+                        EXPERIENCE.AVAILABILITY,
+                        EXPERIENCE.PRICE)
+                .from(EXPERIENCE)
+                .where(EXPERIENCE.APP_USER_ID.eq(userId))
+                .multiple();
+      return List;
+    }
+
+    public KCollection fullListAdmin(){
+        final KCollection List = K
+                .select(EXPERIENCE.LOCATION,
+                        EXPERIENCE.AVAILABILITY,
+                        EXPERIENCE.PRICE)
+                .from(EXPERIENCE)
+                .innerJoin(APP_USER.joinExperience())
+                .innerJoin(ROLE.joinAppUser())
+                .where(ROLE.NAME.eq("Anfitrion"))
+                .multiple();
+        return List;
     }
 }
 

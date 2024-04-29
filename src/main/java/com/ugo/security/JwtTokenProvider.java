@@ -35,7 +35,6 @@ import java.util.UUID;
         // Agregar reclamaciones privadas
         return Jwts.builder()
                 .subject(email)
-                .id(UUID.randomUUID().toString())
                 .claim("email", email)
                 .claim("userId", userId)
                 .issuedAt(new Date())
