@@ -7,7 +7,7 @@ import com.ugo.k.generated.mappers.Experience;
 import com.ugo.payloads.RegisterExperiencePayload;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
+import static com.myzlab.k.KFunction.*;
 import java.util.List;
 
 import static com.ugo.k.generated.metadata.Tables.*;
@@ -22,7 +22,7 @@ public class ExperienceDAK {
             final Long userId
             ){
 
-        final KValues experienceValues = KFunction.values()
+        final KValues experienceValues = values()
                 .append(
                         registerExperiencePayload.getLocation(),
                         registerExperiencePayload.getAvailability(),
@@ -50,7 +50,7 @@ public class ExperienceDAK {
                         EXPERIENCE.AVAILABILITY,
                         EXPERIENCE.PRICE)
                 .from(EXPERIENCE)
-                .where(EXPERIENCE.APP_USER_ID.eq(userId))
+                .where(EXPERIENCE.APP_USER_ID.eq(optional(userId)))
                 .multiple();
       return List;
     }
