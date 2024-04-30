@@ -13,7 +13,6 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
-import java.util.UUID;
 
 @Component
  public class JwtTokenProvider {
@@ -29,14 +28,18 @@ import java.util.UUID;
         return Keys.hmacShaKeyFor(decodeKey);
     }
     public String generateToken(final String email,
-                                final Long userId) {
+                                final Long userId,
+                                final Long roleId,
+                                final String name) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpiration * 1000L);
         // Agregar reclamaciones privadas
         return Jwts.builder()
                 .subject(email)
                 .claim("email", email)
-                .claim("userId", userId)
+                .claim("Id", userId)
+                .claim("name", name)
+                .claim("role_id",roleId )
                 .issuedAt(new Date())
                 .expiration(expiryDate)
                 .signWith(getSecretKey())

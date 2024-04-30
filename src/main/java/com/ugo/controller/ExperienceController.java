@@ -25,10 +25,4 @@ public class ExperienceController {
     ){
         return experienceService.ListExperience(token);
     }
-    @GetMapping("/admin")
-    public ResponseEntity ListAdmin(
-            @RequestHeader ("Authorizacion") String token
-    ){
-        return experienceService.fullListAdmin(token);
-    }
 }

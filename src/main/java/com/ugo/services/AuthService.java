@@ -6,6 +6,7 @@ import com.ugo.VerifyRecaptcha.CaptchaVerifier;
 import com.ugo.dak.AppUserDAK;
 import com.ugo.helpers.ValidatorHelper;
 import com.ugo.k.generated.mappers.AppUser;
+import com.ugo.k.generated.mappers.Role;
 import com.ugo.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -43,7 +44,7 @@ public class AuthService {
             throw KExceptionHelper.badRequest("Credenciales inválidas");
         }
 
-        final String token = jwtTokenProvider.generateToken(email, appUser.getId());
+        final String token = jwtTokenProvider.generateToken(email, appUser.getId(),appUser.getRoleId(), appUser.getName());
 
         return DynamicObject.create()
             .add("emailConfirmed", appUser.getEmailConfirmed())

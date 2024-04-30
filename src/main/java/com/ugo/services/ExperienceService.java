@@ -44,16 +44,28 @@ try {
  }
 
  public ResponseEntity ListExperience( final String token){
-     //obtener el ID del usuario asociado al token
-     final Claims claims = jwtTokenProvider.decode(token);
-     final Long userId = Long.parseLong(claims.get("userId").toString());
-     KCollection Lista= experienceDAK.fullList(userId);
-    return ResponseEntity.ok(Lista.buildResponse());
- }
- public  ResponseEntity fullListAdmin(final String token){
-     final Claims claims = jwtTokenProvider.decode(token);
-    KCollection Lista = experienceDAK.fullListAdmin();
-    return ResponseEntity.ok(Lista.buildResponse());
+
+    try {
+        //obtener el ID del usuario asociado al token
+        final Claims claims = jwtTokenProvider.decode(token);
+        final Long userId = Long.parseLong(claims.get("userId").toString());
+        final Long rolId = Long.parseLong(claims.get("role_id").toString());
+
+        KCollection experiences;
+
+        if (rolId.equals("Anfitrion")) {
+            // Obtener todas las experiencias
+            experiences = experienceDAK.fullList(null);
+        } else if (rolId.equals("Turista")) {
+            // Filtrar por ID del usuario actual
+            experiences = experienceDAK.fullList(userId);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Rol de usuario no válido");
+        }
+        return ResponseEntity.ok(experiences.buildResponse());
+    }catch (KException e){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar la solicitud");
+    }
  }
 }
 

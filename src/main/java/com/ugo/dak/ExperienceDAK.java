@@ -54,18 +54,5 @@ public class ExperienceDAK {
                 .multiple();
       return List;
     }
-
-    public KCollection fullListAdmin(){
-        final KCollection List = K
-                .select(EXPERIENCE.LOCATION,
-                        EXPERIENCE.AVAILABILITY,
-                        EXPERIENCE.PRICE)
-                .from(EXPERIENCE)
-                .innerJoin(APP_USER.joinExperience())
-                .innerJoin(ROLE.joinAppUser())
-                .where(ROLE.NAME.eq("Anfitrion"))
-                .multiple();
-        return List;
-    }
 }
 
