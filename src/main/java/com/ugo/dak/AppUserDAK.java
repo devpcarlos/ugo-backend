@@ -57,6 +57,7 @@ public class AppUserDAK {
             k
             .select(
                 APP_USER.ID,
+                APP_USER.ROLE_ID,
                 APP_USER.NAME,
                 APP_USER.MATERNAL_SURNAME,
                 APP_USER.PATERNAL_SURNAME,

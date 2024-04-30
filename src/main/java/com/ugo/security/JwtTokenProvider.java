@@ -3,6 +3,7 @@ package com.ugo.security;
 import com.myzlab.k.KException;
 import com.myzlab.k.helper.KExceptionHelper;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ClaimsBuilder;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -38,8 +39,8 @@ import java.util.Date;
                 .subject(email)
                 .claim("email", email)
                 .claim("Id", userId)
-                .claim("name", name)
                 .claim("role_id",roleId )
+                .claim("name", name)
                 .issuedAt(new Date())
                 .expiration(expiryDate)
                 .signWith(getSecretKey())

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,7 +31,7 @@ public class ExperienceService {
 try {
     //obtener el ID del usuario asociado al token
     final Claims claims = jwtTokenProvider.decode(token);
-    final Long userId = Long.parseLong(claims.get("userId").toString());
+    final Long userId = Long.parseLong(claims.get("Id").toString());
 
    // final Long userId = UUID.fromString(claims.getId()).getMostSignificantBits() & Long.MAX_VALUE;
     registerExperiencePayload.validate();
@@ -48,15 +49,15 @@ try {
     try {
         //obtener el ID del usuario asociado al token
         final Claims claims = jwtTokenProvider.decode(token);
-        final Long userId = Long.parseLong(claims.get("userId").toString());
+        final Long userId = Long.parseLong(claims.get("Id").toString());
         final Long rolId = Long.parseLong(claims.get("role_id").toString());
 
         KCollection experiences;
 
-        if (rolId.equals("Anfitrion")) {
+        if (rolId.equals(1L)) {
             // Obtener todas las experiencias
             experiences = experienceDAK.fullList(null);
-        } else if (rolId.equals("Turista")) {
+        } else if (rolId.equals(2L)) {
             // Filtrar por ID del usuario actual
             experiences = experienceDAK.fullList(userId);
         } else {
