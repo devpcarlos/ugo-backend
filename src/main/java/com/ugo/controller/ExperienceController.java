@@ -15,13 +15,13 @@ public class ExperienceController {
     @PostMapping("/create")
     public ResponseEntity RegisterExperience(
          @RequestBody final RegisterExperiencePayload registerExperiencePayload,
-         @RequestHeader ("Authorizacion") String token
+         @RequestHeader ("Authorization") String token
     ){
        return experienceService.ResgisterExperience(registerExperiencePayload, token);
     }
     @GetMapping
     public ResponseEntity ListExperience(
-            @RequestHeader ("Authorizacion") String token
+            @RequestHeader ("Authorization") String token
     ){
         return experienceService.ListExperience(token);
     }

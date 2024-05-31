@@ -6,7 +6,6 @@ import com.ugo.VerifyRecaptcha.CaptchaVerifier;
 import com.ugo.dak.AppUserDAK;
 import com.ugo.helpers.ValidatorHelper;
 import com.ugo.k.generated.mappers.AppUser;
-import com.ugo.k.generated.mappers.Role;
 import com.ugo.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
